@@ -1,5 +1,6 @@
 import React from 'react'
-import { ink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
 const Nav = ({search, setSearch}) => {
   return (
     <nav className='Nav'>
@@ -14,6 +15,11 @@ const Nav = ({search, setSearch}) => {
         />
 
        </form>
+       <ul>
+        <li><Link to='/'>Home</Link></li>
+        <li><Link to='/post'>New Post</Link></li>
+        <li><Link to='/about'>About</Link></li>
+       </ul>
     </nav>
   )
 }

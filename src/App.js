@@ -6,36 +6,24 @@ import About from "./About.js";
 import NewPost from "./NewPost.js";
 import PostPage from "./PostPage.js";
 import Missing from "./Missing.js";
-import{Route,Routes} from 'react-router-dom';
-//import { useState, useEffect } from "react";
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-     <Header title="Reeact Js Blog"/>
+      <Header title="React Js Blog"/>
       <Nav />
       <Routes>
-        <Route exact path="/">
-        <Home/>
-        </Route>
-        <Route exact path="/post">
-        <NewPost/>
-        </Route>
-        <Route path="/post/:id">
-        <PostPage/>
-        </Route>
-        <Route path="/about" Component={About} />
-        <Route path="*" Component={Missing} />
+        <Route path="/" element={<Home />} />
+        <Route path="/post" element={<NewPost />} />
+        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<Missing />} />
       </Routes>
-     <Footer />
-
-
-      
-        
+      <Footer />
     </div>
   );
 }
 
 export default App;
- 
