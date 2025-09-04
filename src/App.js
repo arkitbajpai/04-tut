@@ -8,6 +8,7 @@ import PostPage from "./PostPage.js";
 import Missing from "./Missing.js";
 import { Route, Routes, useNavigate } from 'react-router-dom';  // ✅ useNavigate instead of useHistory
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import './App.css';
 
 function App() {
@@ -42,11 +43,27 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
+  useEffect(()=>{
+    const filteredResults = posts.filter((post)=>
+      ((post.body).toLowerCase()).includes(search.toLowerCase()) ||
+      ((post.title).toLowerCase()).includes(search.toLowerCase())
+    );
+    setSearchResults(filteredResults.reverse());
+  },[posts, search]);
 
   const handleSubmit = (e) => {
     // add post submit logic here
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
-    const datetime = new Date().toLocaleString();
+    const datetime = format(new Date(), 'MMMM dd, yyyy pp');
+    const newPost = { id, title: postTitle, datetime, body: postBody };
+    const allPosts = [...posts, newPost];
+    setPosts(allPosts);
+    setPostTitle('');
+    setPostBody('');
+    // navigate to home page after submission
+    navigate('/');
+
+
   };
 
   const navigate = useNavigate();  // ✅ new hook
@@ -61,7 +78,7 @@ function App() {
       <Header title="React Js Blog"/>
       <Nav search={search} setSearch={setSearch}/>
       <Routes>
-        <Route path="/" element={<Home posts={posts}/>} />
+        <Route path="/" element={<Home posts={searchResults}/>} />
         <Route path="/post" element={
           <NewPost 
             handleSubmit={handleSubmit}
