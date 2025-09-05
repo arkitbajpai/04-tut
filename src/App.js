@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import EditPost from "./EditPost.js";
 import './App.css';
 import api from "./api/post.js";
+import useWindowSize from "./Hooks/useWindowSize.js";
 
 function App() {
   const [posts, setPosts] = useState([
@@ -25,6 +26,7 @@ function App() {
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
 
+  const {width} = useWindowSize();
   useEffect(()=>
   {
     const fetchPosts = async () =>{
@@ -93,7 +95,7 @@ const handleEdit= async (id) => {
 
  return (
   <div className="App">
-    <Header title="React Js Blog" />
+    <Header title="React Js Blog" width={width} />
     <Nav search={search} setSearch={setSearch} />
     <Routes>
       <Route path="/" element={<Home posts={searchResults} />} />
