@@ -13,6 +13,7 @@ import EditPost from "./EditPost.js";
 import './App.css';
 import api from "./api/post.js";
 import useWindowSize from "./Hooks/useWindowSize.js";
+import useAxiosFetch from "./Hooks/useAxiosFetch.js";
 
 function App() {
   const [posts, setPosts] = useState([
@@ -27,20 +28,25 @@ function App() {
   const [editBody, setEditBody] = useState('');
 
   const {width} = useWindowSize();
-  useEffect(()=>
-  {
-    const fetchPosts = async () =>{
-      try{
-      const response= await api.get('/posts');
-      if(response && response.data){
-        setPosts(response.data);
-      }
+
+  const{data, fetchError, isLoading}= useAxiosFetch('http://localhost:3500/posts');
+  useEffect(()=>{
+    setPosts(data);
+  },[data])
+  // useEffect(()=>
+  // {
+  //   const fetchPosts = async () =>{
+  //     try{
+  //     const response= await api.get('/posts');
+  //     if(response && response.data){
+  //       setPosts(response.data);
+  //     }
       
-    }
-    catch(err){console.log(err);}
-    }
-    fetchPosts();
-  },[])
+  //   }
+  //   catch(err){console.log(err);}
+  //   }
+  //   fetchPosts();
+  // },[])
   useEffect(()=>{
     const filteredResults = posts.filter((post)=>
       ((post.body).toLowerCase()).includes(search.toLowerCase()) ||
@@ -98,7 +104,10 @@ const handleEdit= async (id) => {
     <Header title="React Js Blog" width={width} />
     <Nav search={search} setSearch={setSearch} />
     <Routes>
-      <Route path="/" element={<Home posts={searchResults} />} />
+      <Route path="/" element={<Home posts={searchResults} 
+      fetchError={fetchError}
+      isLoading={isLoading}
+      />} />
       <Route
         path="/post"
         element={
