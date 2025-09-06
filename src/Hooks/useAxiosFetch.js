@@ -38,3 +38,4 @@ return({data,fetchError,isLoading
 
     })
 }
+export default useAxiosFetch;
