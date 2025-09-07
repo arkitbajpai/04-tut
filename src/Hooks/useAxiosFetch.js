@@ -32,7 +32,7 @@ const useAxiosFetch = (dataUrl) => {
         isMounted=false;
         source.cancel('cancelled in cleanup');
     }
-    return cleanUp1;
+    return cleanUp;
  },[dataUrl]);
 return({data,fetchError,isLoading
 
