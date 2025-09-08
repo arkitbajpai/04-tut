@@ -30,4 +30,40 @@ export default createStore({
     setSearchResults: action((state, payload) => {
         state.searchResults = payload;
     }),
+    postCount: computed((state) => state.post.length),
+    getPostById: computed((state) => {
+        return (id) => state.post.find((post) => (post.id).toString() === id);
+    }),
+    savePost:thunk(async(actions, newPost,helpers) => {
+        const { post } = helpers.getState();
+        try{
+            const response = await api.put(`/posts`,newPost);
+            actions.setPosts([...post, response.data]);
+            actions.setPostTitle('');
+            actions.setPostBody('');
+          } 
+          catch(err){console.log(err);
+        }
+    }),
+    deletePost: thunk(async(actions, id,helpers) => {
+        const { post } = helpers.getState();
+        try{
+            await api.delete(`/posts/${id}`);
+            const postsList = post.filter(post => post.id !== id);
+            actions.setPost(postsList);
+          }
+            catch(err){console.log(err);
+        }
+    }),
+    editPost: thunk(async(actions, updatePost,helpers) => {
+        const { post } = helpers.getState();
+        try{
+            const response = await api.put(`/posts/${updatePost.id}`,updatePost);
+            actions.setPost(post.map(post=>post.id===updatePost.id ?{...response.data}:post));
+            actions.setEditTitle('');
+            actions.setEditBody('');
+          }
+            catch(err){console.log(err);
+        }
+    }),
 })
